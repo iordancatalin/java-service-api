@@ -1,4 +1,4 @@
-package com.online.compiler.runnerapi.runner.core;
+package com.online.compiler.runnerapi.runner.compiler;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
