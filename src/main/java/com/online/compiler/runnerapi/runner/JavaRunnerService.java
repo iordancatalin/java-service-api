@@ -43,7 +43,8 @@ public class JavaRunnerService {
     }
 
     private String executeCompiledCode(String classDirectoryName) {
-        return codeExecutor.executeCompiledCode(classDirectoryName, FILE_NAME);
+        final var pathToClassDirectory = COMPILED_CLASSES_DIRECTORY + "/" + classDirectoryName;
+        return codeExecutor.executeCompiledCode(pathToClassDirectory, FILE_NAME);
     }
 
     private Path createJavaFilePath(String parentDirectoryName) {
