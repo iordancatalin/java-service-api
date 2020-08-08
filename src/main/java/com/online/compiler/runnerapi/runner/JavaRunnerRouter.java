@@ -1,6 +1,8 @@
 package com.online.compiler.runnerapi.runner;
 
 import com.online.compiler.runnerapi.runner.exception.CodeNotCompilableException;
+import com.online.compiler.runnerapi.runner.model.ExecutionLog;
+import com.online.compiler.runnerapi.runner.model.LogLevelEnum;
 import com.online.compiler.runnerapi.runner.model.RunnerRequestModel;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -12,6 +14,7 @@ import org.springframework.web.reactive.function.server.ServerResponse;
 import reactor.core.publisher.Mono;
 
 import javax.tools.Diagnostic;
+import java.util.List;
 import java.util.stream.Collectors;
 
 import static org.springframework.web.reactive.function.server.RouterFunctions.route;
@@ -43,16 +46,17 @@ public class JavaRunnerRouter {
                 .getDiagnostics()
                 .stream()
                 .map(Diagnostic::toString)
-                .collect(Collectors.joining("\n"));
+                .map(error -> new ExecutionLog(error, LogLevelEnum.ERROR))
+                .collect(Collectors.toList());
 
-        return ServerResponse.badRequest().body(just(message), String.class);
+        return ServerResponse.badRequest().body(just(message), List.class);
     }
 
-    private Mono<ServerResponse> createOkResponse(String executionResult) {
-        return ServerResponse.ok().body(just(executionResult), String.class);
+    private Mono<ServerResponse> createOkResponse(List<ExecutionLog> executionLogs) {
+        return ServerResponse.ok().body(just(executionLogs), List.class);
     }
 
-    private Mono<String> compileAndRunCode(String code) {
+    private Mono<List<ExecutionLog>> compileAndRunCode(String code) {
         return fromCompletionStage(javaRunnerService.compileAndExecuteCode(code));
     }
 }

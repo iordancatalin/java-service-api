@@ -4,11 +4,13 @@ import com.online.compiler.runnerapi.runner.compiler.Compiler;
 import com.online.compiler.runnerapi.runner.compiler.FileWriter;
 import com.online.compiler.runnerapi.runner.exception.CodeNotCompilableException;
 import com.online.compiler.runnerapi.runner.executor.CodeExecutor;
+import com.online.compiler.runnerapi.runner.model.ExecutionLog;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import java.nio.file.Path;
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
 
@@ -24,7 +26,7 @@ public class JavaRunnerService {
     private final FileWriter fileWriter;
     private final Compiler compiler;
 
-    public CompletableFuture<String> compileAndExecuteCode(String code) {
+    public CompletableFuture<List<ExecutionLog>> compileAndExecuteCode(String code) {
         return fileWriter.write(code)
                 .thenApply(this::compileAndValidateCode)
                 .thenApply(this::executeCompiledCode)
@@ -42,7 +44,7 @@ public class JavaRunnerService {
         return classDirectoryName;
     }
 
-    private String executeCompiledCode(String classDirectoryName) {
+    private List<ExecutionLog> executeCompiledCode(String classDirectoryName) {
         final var pathToClassDirectory = COMPILED_CLASSES_DIRECTORY + "/" + classDirectoryName;
         final var outputFilePath = pathToClassDirectory + "/" + OUTPUT_FILE_NAME;
 
