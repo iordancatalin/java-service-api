@@ -20,12 +20,11 @@ public class ProcessCodeExecutor implements CodeExecutor {
 
     private static final String JAVA_RUNNER_PATH = "C:/projects/disertatie/jars";
     private static final String JAVA_RUNNER_JAR_NAME = "java-runner-1.0-SNAPSHOT.jar";
-    private static final String OUTPUT_FILE_NAME = "output.txt";
 
     @Override
-    public String executeCompiledCode(String pathToClassDirectory, String className) {
+    public String executeCompiledCode(String pathToClassDirectory, String outputFilePath, String className) {
         try {
-            final var command = buildRunCommand(pathToClassDirectory, className);
+            final var command = buildRunCommand(pathToClassDirectory, outputFilePath, className);
 
             final var processBuilder = new ProcessBuilder(command);
             processBuilder.directory(new File(JAVA_RUNNER_PATH));
@@ -33,7 +32,7 @@ public class ProcessCodeExecutor implements CodeExecutor {
             final var process = processBuilder.start();
             process.waitFor();
 
-            try (Stream<String> stream = Files.lines(toOutputPath(pathToClassDirectory))) {
+            try (Stream<String> stream = Files.lines(Path.of(outputFilePath))) {
                 return stream.collect(Collectors.joining("\n"));
             }
         } catch (IOException | InterruptedException e) {
@@ -43,12 +42,7 @@ public class ProcessCodeExecutor implements CodeExecutor {
         return "";
     }
 
-    private List<String> buildRunCommand(String pathToClassDirectory, String className) {
-        return List.of("java", "-jar", JAVA_RUNNER_JAR_NAME, pathToClassDirectory, className);
-    }
-
-    private Path toOutputPath(String pathToClassDirectory) {
-        final var path = pathToClassDirectory + "/" + OUTPUT_FILE_NAME;
-        return Path.of(path);
+    private List<String> buildRunCommand(String pathToClassDirectory, String outputFilePath, String className) {
+        return List.of("java", "-jar", JAVA_RUNNER_JAR_NAME, pathToClassDirectory, outputFilePath, className);
     }
 }
