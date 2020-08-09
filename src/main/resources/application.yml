@@ -12,3 +12,10 @@ java:
             name: java-runner-1.0-SNAPSHOT.jar
         content:
             separator: \.
+
+timeout:
+    duration: 1
+    timeUnit: MINUTES
+
+messages:
+    timeout: Timeout, the process took longer than %d %s...
