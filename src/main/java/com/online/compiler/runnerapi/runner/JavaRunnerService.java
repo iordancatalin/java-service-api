@@ -8,6 +8,7 @@ import com.online.compiler.runnerapi.runner.model.ExecutionLog;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
@@ -24,6 +25,12 @@ import static com.online.compiler.runnerapi.common.Constants.*;
 @RequiredArgsConstructor
 public class JavaRunnerService {
 
+    @Value("${timeout.duration}")
+    private Long timeout;
+
+    @Value("${timeout.timeUnit}")
+    private TimeUnit timeUnit;
+
     @Qualifier("processCodeExecutor")
     private final CodeExecutor codeExecutor;
 
@@ -34,7 +41,7 @@ public class JavaRunnerService {
         return fileWriter.write(code)
                 .thenApply(this::compileAndValidateCode)
                 .thenCompose(this::executeCompiledCode)
-                .orTimeout(1, TimeUnit.MINUTES);
+                .orTimeout(timeout, timeUnit);
     }
 
     private String compileAndValidateCode(String classDirectoryName) {
