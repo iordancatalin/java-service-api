@@ -4,3 +4,11 @@ server:
 spring:
     application:
         name: JavaRunnerApi
+
+java:
+    runner:
+        path: C:/projects/disertatie/jars
+        jar:
+            name: java-runner-1.0-SNAPSHOT.jar
+        content:
+            separator: \.

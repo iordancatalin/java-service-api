@@ -33,7 +33,7 @@ public class JavaRunnerService {
     public CompletableFuture<List<ExecutionLog>> compileAndExecuteCode(String code) {
         return fileWriter.write(code)
                 .thenApply(this::compileAndValidateCode)
-                .thenApply(this::executeCompiledCode)
+                .thenCompose(this::executeCompiledCode)
                 .orTimeout(1, TimeUnit.MINUTES);
     }
 
@@ -48,7 +48,7 @@ public class JavaRunnerService {
         return classDirectoryName;
     }
 
-    private List<ExecutionLog> executeCompiledCode(String classDirectoryName) {
+    private CompletableFuture<List<ExecutionLog>> executeCompiledCode(String classDirectoryName) {
         final var pathToClassDirectory = COMPILED_CLASSES_DIRECTORY + "/" + classDirectoryName;
         final var outputFilePath = pathToClassDirectory + "/" + OUTPUT_FILE_NAME;
 
