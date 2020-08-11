@@ -1,5 +1,6 @@
 package com.online.compiler.runnerapi.runner.compiler;
 
+import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 
 import javax.tools.DiagnosticCollector;
@@ -10,6 +11,7 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.util.List;
 
+@Log4j2
 @Service
 public class Compiler {
 
@@ -32,7 +34,7 @@ public class Compiler {
 
             task.call();
         } catch (IOException e) {
-            e.printStackTrace();
+            log.error(e);
         }
 
         return diagnostics;
