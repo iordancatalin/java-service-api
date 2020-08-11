@@ -1,21 +1,18 @@
 server:
-    port: 8082
+  port: 8082
 
 spring:
-    application:
-        name: JavaRunnerApi
+  application:
+    name: JavaServiceApi
 
-java:
-    runner:
-        path: C:/projects/disertatie/jars
-        jar:
-            name: java-runner-1.0-SNAPSHOT.jar
-        content:
-            separator: \.
+java-runner:
+  docker:
+    filePath: C:/Users/ciordan/JavaOnlineCompiler/openjdk_11.Dockerfile
+    buildArgs:
+      copyPathArg: COPY_PATH
+    relativeCopyPath: ./generated/classes/
+    container:
+      timeoutMilliseconds: 30000
 
-timeout:
-    duration: 1
-    timeUnit: MINUTES
-
-messages:
-    timeout: Timeout, the process took longer than %d %s...
+gotty:
+  port: 8080

@@ -21,7 +21,6 @@ import static java.nio.file.StandardOpenOption.WRITE;
 public class FileWriter {
 
     /**
-     *
      * @param code the java code to write in file
      * @return CompletableFuture with UUID of the parent directory
      */
@@ -29,17 +28,19 @@ public class FileWriter {
         final var cfResult = new CompletableFuture<String>();
 
         try {
-            final var parentDirectoryName = String.valueOf(UUID.randomUUID());
-            final var directoriesPath = Path.of(getDirectoriesPath(parentDirectoryName));
+            final var codeDirectoryName = String.valueOf(UUID.randomUUID());
+            final var directoriesPath = Path.of(getDirectoriesPath(codeDirectoryName));
 
             createDirectoriesIfNotExists(directoriesPath);
 
             final var pathToClass = Path.of(directoriesPath.toString(), FILE_NAME_WITH_JAVA_EXTENSION);
             final var buffer = createBufferFromCode(code);
-            final var completionHandler = new FileWriteCompletionHandler(parentDirectoryName);
+            final var completionHandler = new FileWriteCompletionHandler(codeDirectoryName);
 
-            AsynchronousFileChannel.open(pathToClass, CREATE, WRITE)
-                    .write(buffer, 0, cfResult, completionHandler);
+            try (final var channel = AsynchronousFileChannel.open(pathToClass, CREATE, WRITE)) {
+                channel.write(buffer, 0, cfResult, completionHandler);
+            }
+
         } catch (Exception e) {
             cfResult.completeExceptionally(e);
         }

@@ -16,6 +16,7 @@
 
 	<properties>
 		<java.version>11</java.version>
+		<docker.java.version>3.2.5</docker.java.version>
 	</properties>
 
 	<dependencies>
@@ -58,9 +59,16 @@
 
 		<dependency>
 			<groupId>com.github.docker-java</groupId>
-			<artifactId>docker-java</artifactId>
-			<version>3.0.14</version>
+			<artifactId>docker-java-core</artifactId>
+			<version>${docker.java.version}</version>
 		</dependency>
+
+		<dependency>
+			<groupId>com.github.docker-java</groupId>
+			<artifactId>docker-java-transport-httpclient5</artifactId>
+			<version>${docker.java.version}</version>
+		</dependency>
+
 	</dependencies>
 
 	<build>
