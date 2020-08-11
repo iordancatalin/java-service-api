@@ -65,31 +65,40 @@ public class DockerService {
                 .withHostConfig(HostConfig.newHostConfig().withPortBindings(portBindings))
                 .withName(UUID.randomUUID().toString())
                 .exec();
+        final var containerId = createContainer.getId();
 
-        dockerClient.startContainerCmd(createContainer.getId()).exec();
-        scheduleContainerForKill(createContainer.getId());
+        dockerClient.startContainerCmd(containerId).exec();
+        scheduleContainerForKill(containerId, imageId);
 
         return freePort;
     }
 
-    private void scheduleContainerForKill(String containerId) {
-        final var killerTask = new ContainerKiller(dockerClient, containerId);
+    private void scheduleContainerForKill(String containerId, String imageId) {
+        final var killerTask = new ImageKiller(dockerClient, containerId, imageId);
 
         final var timer = new Timer();
         timer.schedule(killerTask, containerTimeout);
     }
 
     @RequiredArgsConstructor
-    private static class ContainerKiller extends TimerTask {
+    private static class ImageKiller extends TimerTask {
 
         private final DockerClient dockerClient;
         private final String containerId;
+        private final String imageId;
 
         @Override
         public void run() {
             if (isContainerAlive()) {
                 dockerClient.stopContainerCmd(containerId).exec();
             }
+
+            removeImage();
+        }
+
+        private void removeImage() {
+            dockerClient.removeImageCmd(imageId)
+                    .withForce(Boolean.TRUE).exec();
         }
 
         private boolean isContainerAlive() {
