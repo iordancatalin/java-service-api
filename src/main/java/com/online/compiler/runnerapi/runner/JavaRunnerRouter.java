@@ -43,6 +43,6 @@ public class JavaRunnerRouter {
     }
 
     private Mono<Integer> compileAndRunCode(String code) {
-        return fromCompletionStage(javaRunnerService.compileAndExecuteCode(code));
+        return fromCompletionStage(javaRunnerService.runCode(code));
     }
 }
