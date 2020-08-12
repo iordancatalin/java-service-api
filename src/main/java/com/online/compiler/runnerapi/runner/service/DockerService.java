@@ -1,4 +1,4 @@
-package com.online.compiler.runnerapi.runner.docker;
+package com.online.compiler.runnerapi.runner.service;
 
 import com.github.dockerjava.api.DockerClient;
 import com.github.dockerjava.api.command.BuildImageResultCallback;
@@ -41,7 +41,7 @@ public class DockerService {
     private final DockerClient dockerClient;
 
     /**
-     * @param classDirectoryName
+     * @param classDirectoryName the uuid name of the directory
      * @return the port to witch the user can see the terminal
      */
     public int startTerminal(String classDirectoryName) {
@@ -56,7 +56,7 @@ public class DockerService {
                 .withDockerfile(new File(dockerFilePath))
                 .withBuildArg(copyPathArg, copyPath)
                 .withPull(Boolean.FALSE)
-                .withNoCache(Boolean.TRUE)
+                .withNoCache(Boolean.FALSE)
                 .exec(new BuildImageResultCallback())
                 .awaitImageId();
 
@@ -74,10 +74,10 @@ public class DockerService {
     }
 
     private void scheduleContainerForKill(String containerId, String imageId) {
-        final var killerTask = new ImageKiller(dockerClient, containerId, imageId);
+        final var killer = new ImageKiller(dockerClient, containerId, imageId);
 
         final var timer = new Timer();
-        timer.schedule(killerTask, containerTimeout);
+        timer.schedule(killer, containerTimeout);
     }
 
     @RequiredArgsConstructor
