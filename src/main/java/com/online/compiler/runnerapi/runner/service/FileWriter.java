@@ -1,4 +1,4 @@
-package com.online.compiler.runnerapi.runner.compiler;
+package com.online.compiler.runnerapi.runner.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -55,7 +55,7 @@ public class FileWriter {
     }
 
     private String getDirectoriesPath(String uuid) {
-        return COMPILED_CLASSES_DIRECTORY + "/" + uuid + "/";
+        return CLASSES_DIRECTORY + "/" + uuid + "/";
     }
 
     private ByteBuffer createBufferFromCode(String code) {

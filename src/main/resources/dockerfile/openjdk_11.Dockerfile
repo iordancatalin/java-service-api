@@ -2,8 +2,9 @@ FROM java-runner-base:11
 
 ARG COPY_PATH
 
-COPY ${COPY_PATH} /compiled
-WORKDIR /compiled
+COPY ${COPY_PATH} /classes
+WORKDIR /classes
 
-CMD [ "java", "Main" ]
+
+CMD ["sh","-c", "javac Main.java && java Main"]
 ENTRYPOINT ["/usr/local/bin/gotty","--permit-write", "--once", "--config", "/gotty"]

@@ -5,6 +5,6 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public class SuccessModel {
+public class TerminalStartModel {
     private final String terminalEndpoint;
 }
