@@ -1,6 +1,7 @@
 package com.online.compiler.runnerapi.runner.service;
 
 import com.github.dockerjava.api.model.ExposedPort;
+import com.online.compiler.runnerapi.core.Constants;
 import com.online.compiler.runnerapi.runner.model.BuildArgModel;
 import com.online.compiler.runnerapi.runner.model.PortMapping;
 import lombok.RequiredArgsConstructor;
@@ -25,9 +26,6 @@ public class JavaRunnerService {
     @Value("${java-runner.docker.buildArgs.copyPathArg}")
     private String copyPathArg;
 
-    @Value("${java-runner.docker.relativeCopyPath}")
-    private String relativeCopyPath;
-
     @Value("${java-runner.docker.container.timeoutMilliseconds}")
     private Long containerTimeout;
 
@@ -44,7 +42,7 @@ public class JavaRunnerService {
     }
 
     private String buildDockerImage(String classDirectoryName) {
-        final var copyPath = relativeCopyPath + classDirectoryName;
+        final var copyPath = Constants.GENERATED_DIR_RELATIVE_TO_STORAGE_ROOT + classDirectoryName;
         final var buildArg = new BuildArgModel(copyPathArg, copyPath);
 
         return dockerService.buildImage(dockerFilePath, List.of(buildArg));
