@@ -1,4 +1,4 @@
-package com.online.compiler.runnerapi.features.multiversions.router;
+package com.online.compiler.runnerapi.features.multiversions;
 
 import com.online.compiler.runnerapi.core.JavaVersionsManager;
 import lombok.RequiredArgsConstructor;

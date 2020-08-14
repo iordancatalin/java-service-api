@@ -7,10 +7,8 @@ spring:
 
 java-runner:
   docker:
-    filePath: C:/Users/ciordan/JavaOnlineCompiler/openjdk_11.Dockerfile
     buildArgs:
       copyPathArg: COPY_PATH
-    relativeCopyPath: ./generated/classes/
     container:
       timeoutMilliseconds: 30000
 
