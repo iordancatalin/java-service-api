@@ -21,7 +21,7 @@ public class ApplicationReadyListener {
 
     @EventListener(ApplicationReadyEvent.class)
     public void applicationReady() {
-        final var dockerfiles = javaVersionsManager.getDockerfiles();
+        final var dockerfiles = javaVersionsManager.getDockerfilesFromResources();
 
         dockerfiles.stream()
                 .map(File::toPath)

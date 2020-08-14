@@ -1,4 +1,4 @@
-package com.online.compiler.runnerapi.core.config;
+package com.online.compiler.runnerapi.features.runner.config;
 
 import com.github.dockerjava.api.DockerClient;
 import com.github.dockerjava.core.DefaultDockerClientConfig;

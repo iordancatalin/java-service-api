@@ -1,4 +1,4 @@
-package com.online.compiler.runnerapi.runner.model;
+package com.online.compiler.runnerapi.features.runner.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

@@ -1,8 +1,8 @@
 package com.online.compiler.runnerapi.features.runner;
 
 import com.online.compiler.runnerapi.features.runner.service.JavaRunnerService;
-import com.online.compiler.runnerapi.runner.model.RunnerRequestModel;
-import com.online.compiler.runnerapi.runner.model.TerminalStartModel;
+import com.online.compiler.runnerapi.features.runner.model.RunnerRequestModel;
+import com.online.compiler.runnerapi.features.runner.model.TerminalStartModel;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.context.annotation.Bean;
@@ -30,8 +30,7 @@ public class JavaRunnerRouter {
 
     private Mono<ServerResponse> processRequest(ServerRequest serverRequest) {
         return serverRequest.bodyToMono(RunnerRequestModel.class)
-                .map(RunnerRequestModel::getCode)
-                .flatMap(this::compileAndRunCode)
+                .flatMap(this::writeCodeAndStartContainer)
                 .flatMap(this::createOkResponse);
     }
 
@@ -42,7 +41,7 @@ public class JavaRunnerRouter {
         return ServerResponse.ok().body(just(body), TerminalStartModel.class);
     }
 
-    private Mono<Integer> compileAndRunCode(String code) {
-        return fromCompletionStage(javaRunnerService.runCode(code));
+    private Mono<Integer> writeCodeAndStartContainer(RunnerRequestModel model) {
+        return fromCompletionStage(javaRunnerService.writeJavaFileAndStartDockerContainer(model));
     }
 }
