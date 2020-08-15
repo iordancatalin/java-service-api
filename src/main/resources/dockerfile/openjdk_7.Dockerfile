@@ -1,4 +1,4 @@
-FROM x-openjdk:11
+FROM x-openjdk:7
 
 ARG COPY_PATH
 
