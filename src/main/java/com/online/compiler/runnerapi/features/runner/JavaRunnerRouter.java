@@ -35,8 +35,7 @@ public class JavaRunnerRouter {
     }
 
     private Mono<ServerResponse> createOkResponse(Integer port) {
-        final var gottyEndpoint = "http://localhost:" + port;
-        final var body = new TerminalStartModel(gottyEndpoint);
+        final var body = new TerminalStartModel(port);
 
         return ServerResponse.ok().body(just(body), TerminalStartModel.class);
     }
