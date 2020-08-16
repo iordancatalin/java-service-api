@@ -6,5 +6,5 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public class TerminalStartModel {
-    private final String terminalEndpoint;
+    private final int terminalPort;
 }
