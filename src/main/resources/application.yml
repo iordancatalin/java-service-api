@@ -10,7 +10,7 @@ java-runner:
     buildArgs:
       copyPathArg: COPY_PATH
     container:
-      timeoutMilliseconds: 30000
+      timeoutMilliseconds: 600000
 
 gotty:
   port: 8080
